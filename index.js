@@ -114,7 +114,7 @@ const start = async () => {
   message = JSON.stringify(`${message}${program.message || userMessage}`);
 
   try {
-    console.log(`\nYour commit message: ${chalk.green(message)}`);
+    console.log(`\nYour commit message: ${chalk.greenBright(message)}`);
     const shouldCommit = await prompt('Do you want to commit? ', 'Y');
 
     if (!/yes|y/.test(shouldCommit.toLowerCase())) {
@@ -155,7 +155,7 @@ const start = async () => {
     const command = `git commit ${gitOptions.join(' ')} ${message}`;
     const output = await runCommand(command);
     console.log(output);
-    console.log(`\n🏆  ${chalk.greenBright('Done!')}`);
+    console.log(`🏆  ${chalk.greenBright('Done!')}`);
   } catch (error) {
     console.log(error);
     return;
