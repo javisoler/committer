@@ -151,7 +151,6 @@ const start = async () => {
   // RUN GIT COMMIT
   try {
     const command = `git commit ${gitOptions.join(' ')} ${message}`;
-    console.log(command);
     const output = await runCommand(command);
     console.log(output);
   } catch (error) {
