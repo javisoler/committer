@@ -19,7 +19,7 @@ try {
 const displayError = (error) => {
   if (error && error.length) {
     console.log('');
-    console.log(chalk.bgRed(`  ${error}`));
+    console.log(`   ${chalk.bgRed(error)}`);
     console.log('');
   }
 };
@@ -83,7 +83,7 @@ const start = async () => {
   if (!program.message) {
     try {
       console.log('');
-      userMessage = await prompt('Enter commit message:');
+      userMessage = await prompt(`💻  Enter commit message:`);
 
       if (!userMessage || !userMessage.trim().length) {
         displayError('Cannot commit without a message!');
@@ -128,11 +128,11 @@ const start = async () => {
   // ANOTHER WARNING IF BRANCH IS MASTER
   if (branchName.toLowerCase() === 'master') {
     try {
-      console.log(`\n${chalk.white.bgRed.bold('WARNING!')} You are about to commit to master!`);
+      console.log(`\n‼️  ${chalk.white.bgRed.bold('WARNING!')} You are about to commit to master!`);
       const shouldCommit = await prompt('Do you want to proceed? ', 'N');
 
       if (/no|n/.test(shouldCommit.toLowerCase())) {
-        console.log('\nOperation aborted!');
+        console.log(chalk.magentaBright('\nOperation aborted!'));
         return;
       }
     } catch (error) {
@@ -155,6 +155,7 @@ const start = async () => {
     const command = `git commit ${gitOptions.join(' ')} ${message}`;
     const output = await runCommand(command);
     console.log(output);
+    console.log(`\n🏆  ${chalk.greenBright('Done!')}`);
   } catch (error) {
     console.log(error);
     return;
