@@ -63,7 +63,7 @@ if (!fs.existsSync('.git')) {
   return;
 }
 
-
+// PARSE ARGUMENTS AND OPTIONS
 program
   .version('0.1.0')
   .option('-a, --all', 'Add all files to staging')
@@ -73,6 +73,7 @@ program
   .parse(process.argv);
 
 
+// MAIN
 const start = async () => {
   let userMessage;
   let message;
