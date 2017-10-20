@@ -1,16 +1,11 @@
 #!/usr/bin/env node
 const program = require('commander');
+const chalk = require('chalk');
 const exec = require('child_process').exec;
 const fs = require('fs');
 const os = require('os');
 const path = require('path');
 const read = require('read');
-
-// EXIT IF NOT GIT REPO
-if (!fs.existsSync('.git')) {
-  displayError('Gitter can only be run inside a git repository!');
-  return;
-}
 
 // READ CONFIG FROM FILE
 let options;
@@ -24,7 +19,7 @@ try {
 const displayError = (error) => {
   if (error && error.length) {
     console.log('');
-    console.log(`  ${error}`);
+    console.log(chalk.bgRed(`  ${error}`));
     console.log('');
   }
 };
@@ -50,7 +45,7 @@ const runCommand = (command) => {
 const prompt = (message, defaultOption) => {
   return new Promise((resolve, reject) => {
     read({
-      prompt: message,
+      prompt: chalk.yellow(message),
       default: defaultOption,
     }, (error, result) => {
       if (error) {
@@ -61,6 +56,12 @@ const prompt = (message, defaultOption) => {
     });
   });
 };
+
+// EXIT IF NOT GIT REPO
+if (!fs.existsSync('.git')) {
+  displayError('Gitter can only be run inside a git repository!');
+  return;
+}
 
 
 program
@@ -81,7 +82,7 @@ const start = async () => {
   if (!program.message) {
     try {
       console.log('');
-      userMessage = await prompt('Enter commit message: ');
+      userMessage = await prompt('Enter commit message:');
 
       if (!userMessage || !userMessage.trim().length) {
         displayError('Cannot commit without a message!');
@@ -109,10 +110,10 @@ const start = async () => {
   }
 
   // CONFIRM FINAL COMMIT MESSAGE WITH USER
-  message = `"${message}${program.message || userMessage}"`;
+  message = JSON.stringify(`${message}${program.message || userMessage}`);
 
   try {
-    console.log(`\nYour commit message: ${message}`);
+    console.log(`\nYour commit message: ${chalk.green(message)}`);
     const shouldCommit = await prompt('Do you want to commit? ', 'Y');
 
     if (!/yes|y/.test(shouldCommit.toLowerCase())) {
@@ -126,7 +127,7 @@ const start = async () => {
   // ANOTHER WARNING IF BRANCH IS MASTER
   if (branchName.toLowerCase() === 'master') {
     try {
-      console.log(`\nWARNING! You are about to commit to master.`);
+      console.log(`\n${chalk.white.bgRed.bold('WARNING!')} You are about to commit to master!`);
       const shouldCommit = await prompt('Do you want to proceed? ', 'N');
 
       if (/no|n/.test(shouldCommit.toLowerCase())) {
