@@ -126,13 +126,13 @@ const start = async () => {
   }
 
   // ANOTHER WARNING IF BRANCH IS MASTER
-  if (branchName.toLowerCase() === 'master') {
+  if (options.protectedBranches.indexOf(branchName.toLowerCase()) > -1) {
     try {
-      console.log(`\n‼️  ${chalk.white.bgRed.bold('WARNING!')} You are about to commit to master!`);
+      console.log(`\n‼️  ${chalk.white.bgRed.bold('WARNING!')} You are about to commit to ${branchName.toLowerCase()}!`);
       const shouldCommit = await prompt('Do you want to proceed? ', 'N');
 
       if (/no|n/.test(shouldCommit.toLowerCase())) {
-        console.log(chalk.magentaBright('\nOperation aborted!'));
+        console.log(chalk.magentaBright('\nPhew! Operation aborted!'));
         return;
       }
     } catch (error) {
