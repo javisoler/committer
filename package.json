@@ -1,12 +1,12 @@
 {
-  "name": "committer",
+  "name": "cm",
   "version": "0.1.0",
   "description": "A command line tool to wrap and supercharge git commmands",
   "main": "index.js",
   "author": "Javier Soler",
   "license": "MIT",
   "bin": {
-    "committer": "./index.js"
+    "cm": "./index.js"
   },
   "dependencies": {
     "chalk": "^2.2.0",
