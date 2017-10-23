@@ -10,7 +10,7 @@ const read = require('read');
 // READ CONFIG FROM FILE
 let options;
 try {
-  options = require(path.resolve(os.homedir(), '.gitter.json'));
+  options = require(path.resolve(os.homedir(), '.cm-config.json'));
 } catch (e) {
   options = {};
 }
@@ -104,14 +104,14 @@ const start = async () => {
   if (options.includeBranch || program.branch) {
     try {
       branchName = await getBranchName();
-      message = `${message}[${branchName}] `;
+      message = `${message || ''}[${branchName}] `;
     } catch (err) {
       console.error(err);
     }
   }
 
   // CONFIRM FINAL COMMIT MESSAGE WITH USER
-  message = JSON.stringify(`${message}${program.message || userMessage}`);
+  message = JSON.stringify(`${message || ''}${program.message || userMessage}`);
 
   try {
     console.log(`\nYour commit message: ${chalk.greenBright(message)}`);
