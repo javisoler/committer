@@ -24,6 +24,7 @@ const displayError = (error) => {
   }
 };
 
+// TODO: BUG: This returns undefined if the branch is new and without commits
 const getBranchName = () => {
   return new Promise((resolve, reject) => {
     const runScript = exec("git symbolic-ref HEAD | sed 's!refs\/heads\/!!'");
