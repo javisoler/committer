@@ -158,7 +158,7 @@ const start = async () => {
     const command = `git commit ${gitOptions.join(' ')} ${message}`;
     const output = await runCommand(command);
 
-    console.log(output);
+    console.log(chalk.italic.dim.greenBright(output));
     console.log(`🏆  ${chalk.greenBright('Done!')}`);
   } catch (error) {
     console.log(error);
