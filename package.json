@@ -11,6 +11,6 @@
   "dependencies": {
     "chalk": "^2.2.0",
     "commander": "^2.11.0",
-    "read": "^1.0.7"
+    "inquirer": "^4.0.0"
   }
 }
