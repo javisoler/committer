@@ -45,7 +45,7 @@ const start = async () => {
       const command = `git status`;
       const output = await runCommand(command);
 
-      console.log(output);
+      console.log(chalk.italic.dim.greenBright(output));
     } catch (error) {
       console.log(error);
       return;
