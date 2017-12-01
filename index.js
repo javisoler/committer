@@ -2,7 +2,6 @@
 
 const program = require('commander');
 const chalk = require('chalk');
-const fs = require('fs');
 const os = require('os');
 const path = require('path');
 const inquirer = require('inquirer');
@@ -13,26 +12,29 @@ const {
   getBranchName,
 } = require('./lib/utils');
 const { addFiles, getStagedFiles } = require('./lib/add');
+const { fetchConfig, interactiveConfig } = require('./lib/config');
 
 
 // READ CONFIG FROM FILE
-let options;
-try {
-  options = require(path.resolve(os.homedir(), '.cm-config.json'));
-} catch (e) {
-  options = {};
-}
+const options = fetchConfig();
 
 // PARSE ARGUMENTS AND OPTIONS
 program
   .version('0.1.0')
   .option('-a, --all', 'Add all files to staging')
   .option('-m, --message <message>', 'Commit message')
-  .option('-u, --user <user>', 'Add user initials to commit message')
+  .option('-u, --user <user>', 'Add user name to commit message')
   .option('-b, --branch', 'Add current branch name to commit message')
   .option('-s, --status', 'Show git status')
   .option('-f, --files', 'Interactive display of staged and modified files')
+  .option('-c, --config [item]', 'Change configuration')
   .parse(process.argv);
+
+// LAUNCH CONFIGURATION SETUP
+if (program.config) {
+  interactiveConfig();
+  return;
+}
 
 // MAIN
 const start = async () => {
@@ -45,16 +47,16 @@ const start = async () => {
       const command = `git status`;
       const output = await runCommand(command);
 
-      console.log(chalk.italic.dim.greenBright(output));
+      console.log(chalk.dim(output));
     } catch (error) {
       console.log(error);
       return;
     }
   }
 
-  if (program.files) {
+  if (program.files || options.showFiles) {
     await addFiles();
-    
+
     const stagedFiles = await getStagedFiles();
 
     if (!stagedFiles || !stagedFiles.length) {
@@ -67,7 +69,7 @@ const start = async () => {
   if (!program.message) {
     try {
       if (!program.status) console.log('');
-      console.log(`💻  ${chalk.yellow('Enter your commit message')}`);
+      console.log(`💻  ${chalk.yellow.bold('Enter your commit message:')}`);
       const answers = await inquirer.prompt([{
         type: 'input',
         name: 'userMessageInput',
@@ -88,15 +90,15 @@ const start = async () => {
   }
 
   // SET USER INITIALS
-  if (options.userInitials || program.user) {
-    message = `[${options.userInitials || program.user}] `;
+  if (options.userName || program.user) {
+    message = `${options.wrapper ? '[' : ''}${program.user || options.userName}${options.wrapper ? ']' : ''} `;
   }
 
   // SET BRANCH NAME
   if (options.includeBranch || program.branch) {
     try {
       branchName = await getBranchName();
-      message = `${message || ''}[${branchName}] `;
+      message = `${message || ''}${options.wrapper ? '[' : ''}${branchName}${options.wrapper ? ']' : ''} `;
     } catch (err) {
       console.error(err);
     }
