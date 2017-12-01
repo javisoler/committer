@@ -11,7 +11,7 @@ const {
   runCommand,
   getBranchName,
 } = require('./lib/utils');
-const { addFiles, getStagedFiles } = require('./lib/add');
+const { addFiles, getStagedFiles, getChangedFiles } = require('./lib/add');
 const { fetchConfig, interactiveConfig } = require('./lib/config');
 
 
@@ -57,10 +57,31 @@ const start = async () => {
   if (program.files || options.showFiles) {
     await addFiles();
 
+    // Check after files selection if any was staged
     const stagedFiles = await getStagedFiles();
 
     if (!stagedFiles || !stagedFiles.length) {
       displayError('No files staged for commit!')
+      return;
+    }
+  } else {
+    // If no files selection check for changed or staged files
+    const stagedFiles = await getStagedFiles();
+    const changedFiles = await getChangedFiles();
+
+    // Exit if no `-a` selected and no staged files
+    if (
+      !(options.gitAddAll || program.all)
+      && !stagedFiles.length
+      && (changedFiles.add.length || changedFiles.remove.length)
+    ) {
+      displayError('No files staged for commit!')
+      return;
+    }
+
+    // Exit if no changed nor staged files
+    if (!changedFiles.add.length && !changedFiles.remove.length && !stagedFiles.length) {
+      displayError('Nothing to commit!')
       return;
     }
   }
@@ -161,7 +182,7 @@ const start = async () => {
     const output = await runCommand(command);
 
     console.log('');
-    console.log(chalk.italic.dim.greenBright(output));
+    console.log(chalk.dim(output));
     console.log(`🏆  ${chalk.greenBright('Done!')}`);
   } catch (error) {
     console.log(error);
