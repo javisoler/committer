@@ -1,6 +1,6 @@
-# COMMITTER
+# CMTR (committer)
 
-`committer` is a small command line utility to aid with [git](https://git-scm.com/) commits, especially the commit message.
+`cmtr` is a small command line utility to aid with [git](https://git-scm.com/) commits, especially the commit message.
 
 The motivation for this project arises from trying to harmonise commit messages between members of a team. We wanted everybody to prepend their commit messages with their initials and the branch name, so that they're easier to identify and to facilitate integration with other tools that try to read branch names from commit messages.
 
@@ -8,7 +8,7 @@ As part of the experimentation with git and node that inspires this project, a v
 
 ## Installation
 
-`committer` is written in JavaScript, so [Node](https://nodejs.org/) needs to be installed in the system. 
+`cmtr` is written in JavaScript, so [Node](https://nodejs.org/) needs to be installed in the system. 
 
 When Node is installed, `npm` will be available. So just run the following command to install:
 ```bash
@@ -47,12 +47,12 @@ To turn on some options by default run the configuration utility with `cmtr --co
 
 ```json
 {
-  "userName": "JS",         // Prepend user name
-  "includeBranch": true,    // Prepend branch name
-  "wrapper": true,          // Wrap user and branch with `[]`
-  "showFiles": true,        // Show interactive file selector
-  "gitAddAll": false,       // Add all files to commit
-  "protectedBranches": [    // Warn before committing to these branches
+  "userName": "JS",         /* Prepend user name */
+  "includeBranch": true,    /* Prepend branch name */
+  "wrapper": true,          /* Wrap user and branch with `[]` */
+  "showFiles": true,        /* Show interactive file selector */
+  "gitAddAll": false,       /* Add all files to commit */
+  "protectedBranches": [    /* Warn before committing to these branches */
     "master",
     "develop"
   ]
