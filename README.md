@@ -45,18 +45,28 @@ cmtr -am 'My commit message' -u 'JS'
 ### Configuration
 To turn on some options by default run the configuration utility with `cmtr --config`. The configuration will be saved in `~/.cmtr-config.json`, which can be created/edited manually if desired.
 
+This is an example configuration:
 ```json
 {
-  "userName": "JS",         /* Prepend user name */
-  "includeBranch": true,    /* Prepend branch name */
-  "wrapper": true,          /* Wrap user and branch with `[]` */
-  "showFiles": true,        /* Show interactive file selector */
-  "gitAddAll": false,       /* Add all files to commit */
-  "protectedBranches": [    /* Warn before committing to these branches */
+  "userName": "JS",
+  "includeBranch": true,
+  "wrapper": true,
+  "showFiles": true,
+  "protectedBranches": [
     "master",
     "develop"
   ]
 }
 ```
+Possible values for the configuration file:
+
+| Key | Type | Description |
+| ---  | --- | --- |
+| `userName` | `string` | Prepend user name |
+| `includeBranch` | `boolean` | Prepend branch name |
+| `wrapper` | `boolean` | Wrap user and branch with `[]` |
+| `showFiles` | `boolean` | Show interactive file selector |
+| `gitAddAll` | `boolean` | Add all files to commit |
+| `protectedBranches` | `array[string]` | Warn before committing to the branches specified |
 
 Happy committing!

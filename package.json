@@ -2,6 +2,10 @@
   "name": "cmtr",
   "version": "0.1.3",
   "description": "Helper script to add user initials and branch name to commits",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/javisoler/committer"
+  },
   "main": "index.js",
   "author": "Javier Soler",
   "license": "MIT",
