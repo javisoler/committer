@@ -1,6 +1,6 @@
 {
-  "name": "committer",
-  "version": "0.1.1",
+  "name": "cmtr",
+  "version": "0.1.2",
   "description": "Helper script to add user initials and branch name to commits",
   "main": "index.js",
   "author": "Javier Soler",
