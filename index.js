@@ -26,8 +26,8 @@ program
   .option('-u, --user <user>', 'Add user name to commit message')
   .option('-b, --branch', 'Add current branch name to commit message')
   .option('-s, --status', 'Show git status')
-  .option('-f, --files', 'Interactive display of staged and modified files')
-  .option('-c, --config [item]', 'Change configuration')
+  .option('-f, --files', 'Interactively select files to commit')
+  .option('-c, --config', 'Change configuration')
   .parse(process.argv);
 
 // LAUNCH CONFIGURATION SETUP

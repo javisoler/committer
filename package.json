@@ -1,7 +1,7 @@
 {
-  "name": "cmtr",
+  "name": "committer",
   "version": "0.1.0",
-  "description": "A command line tool to wrap and supercharge git commmands",
+  "description": "Helper script to add user initials and branch name to commits",
   "main": "index.js",
   "author": "Javier Soler",
   "license": "MIT",
