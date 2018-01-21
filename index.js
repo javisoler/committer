@@ -42,6 +42,13 @@ const start = async () => {
   let message;
   let branchName = '';
 
+  // Get the branch name
+  try {
+    branchName = await getBranchName();
+  } catch (err) {
+    console.error(err);
+  }
+
   if (program.status) {
     try {
       const command = `git status`;
@@ -90,7 +97,9 @@ const start = async () => {
   if (!program.message) {
     try {
       if (!program.status) console.log('');
+
       console.log(`💻  ${chalk.yellow.bold('Enter your commit message:')}`);
+      
       const answers = await inquirer.prompt([{
         type: 'input',
         name: 'userMessageInput',
@@ -116,13 +125,8 @@ const start = async () => {
   }
 
   // SET BRANCH NAME
-  if (options.includeBranch || program.branch) {
-    try {
-      branchName = await getBranchName();
-      message = `${message || ''}${options.wrapper ? '[' : ''}${branchName}${options.wrapper ? ']' : ''} `;
-    } catch (err) {
-      console.error(err);
-    }
+  if ((options.includeBranch || program.branch) && branchName.length) {
+    message = `${message || ''}${options.wrapper ? '[' : ''}${branchName}${options.wrapper ? ']' : ''} `;
   }
 
   // CONFIRM FINAL COMMIT MESSAGE WITH USER
@@ -146,7 +150,10 @@ const start = async () => {
   }
 
   // ANOTHER WARNING IF BRANCH IS PROTECTED
-  if (options.protectedBranches.indexOf(branchName.toLowerCase()) > -1) {
+  if (
+    options.protectedBranches
+    && options.protectedBranches.indexOf(branchName.toLowerCase()) > -1
+  ) {
     try {
       console.log(`\n‼️  ${chalk.white.bgRed.bold('WARNING!')} You are about to commit to ${branchName.toLowerCase()}!`);
       const answers = await inquirer.prompt([{
