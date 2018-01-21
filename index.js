@@ -6,14 +6,9 @@ const os = require('os');
 const path = require('path');
 const inquirer = require('inquirer');
 
-const {
-  displayError,
-  runCommand,
-  getBranchName,
-} = require('./lib/utils');
+const { displayError, runCommand, getBranchName } = require('./lib/utils');
 const { addFiles, getStagedFiles, getChangedFiles } = require('./lib/add');
 const { fetchConfig, interactiveConfig } = require('./lib/config');
-
 
 // READ CONFIG FROM FILE
 const options = fetchConfig();
@@ -27,7 +22,7 @@ program
   .option('-b, --branch', 'Add current branch name to commit message')
   .option('-s, --status', 'Show git status')
   .option('-f, --files', 'Interactively select files to commit')
-  .option('-c, --config', 'Change configuration')
+  .option('-c, --config', 'Configuration wizard')
   .parse(process.argv);
 
 // LAUNCH CONFIGURATION SETUP
@@ -68,7 +63,7 @@ const start = async () => {
     const stagedFiles = await getStagedFiles();
 
     if (!stagedFiles || !stagedFiles.length) {
-      displayError('No files staged for commit!')
+      displayError('No files staged for commit!');
       return;
     }
   } else {
@@ -78,17 +73,21 @@ const start = async () => {
 
     // Exit if no `-a` selected and no staged files
     if (
-      !(options.gitAddAll || program.all)
-      && !stagedFiles.length
-      && (changedFiles.add.length || changedFiles.remove.length)
+      !(options.gitAddAll || program.all) &&
+      !stagedFiles.length &&
+      (changedFiles.add.length || changedFiles.remove.length)
     ) {
-      displayError('No files staged for commit!')
+      displayError('No files staged for commit!');
       return;
     }
 
     // Exit if no changed nor staged files
-    if (!changedFiles.add.length && !changedFiles.remove.length && !stagedFiles.length) {
-      displayError('Nothing to commit!')
+    if (
+      !changedFiles.add.length &&
+      !changedFiles.remove.length &&
+      !stagedFiles.length
+    ) {
+      displayError('Nothing to commit!');
       return;
     }
   }
@@ -99,13 +98,15 @@ const start = async () => {
       if (!program.status) console.log('');
 
       console.log(`💻  ${chalk.yellow.bold('Enter your commit message:')}`);
-      
-      const answers = await inquirer.prompt([{
-        type: 'input',
-        name: 'userMessageInput',
-        message: '>>>',
-        prefix: '',
-      }]);
+
+      const answers = await inquirer.prompt([
+        {
+          type: 'input',
+          name: 'userMessageInput',
+          message: '>>>',
+          prefix: '',
+        },
+      ]);
 
       userMessage = answers.userMessageInput;
 
@@ -121,12 +122,15 @@ const start = async () => {
 
   // SET USER INITIALS
   if (options.userName || program.user) {
-    message = `${options.wrapper ? '[' : ''}${program.user || options.userName}${options.wrapper ? ']' : ''} `;
+    message = `${options.wrapper ? '[' : ''}${program.user ||
+      options.userName}${options.wrapper ? ']' : ''} `;
   }
 
   // SET BRANCH NAME
   if ((options.includeBranch || program.branch) && branchName.length) {
-    message = `${message || ''}${options.wrapper ? '[' : ''}${branchName}${options.wrapper ? ']' : ''} `;
+    message = `${message || ''}${options.wrapper ? '[' : ''}${branchName}${
+      options.wrapper ? ']' : ''
+    } `;
   }
 
   // CONFIRM FINAL COMMIT MESSAGE WITH USER
@@ -134,12 +138,15 @@ const start = async () => {
 
   try {
     console.log(`\nYour commit message: ${chalk.greenBright(message)}`);
-    const answers = await inquirer.prompt([{
-      type: 'confirm',
-      name: 'shouldCommit',
-      message: 'Commit?',
-      prefix: '',
-    }]);
+
+    const answers = await inquirer.prompt([
+      {
+        type: 'confirm',
+        name: 'shouldCommit',
+        message: 'Commit?',
+        prefix: '',
+      },
+    ]);
 
     if (!answers.shouldCommit) {
       return;
@@ -151,18 +158,24 @@ const start = async () => {
 
   // ANOTHER WARNING IF BRANCH IS PROTECTED
   if (
-    options.protectedBranches
-    && options.protectedBranches.indexOf(branchName.toLowerCase()) > -1
+    options.protectedBranches &&
+    options.protectedBranches.indexOf(branchName.toLowerCase()) > -1
   ) {
     try {
-      console.log(`\n‼️  ${chalk.white.bgRed.bold('WARNING!')} You are about to commit to ${branchName.toLowerCase()}!`);
-      const answers = await inquirer.prompt([{
-        type: 'confirm',
-        name: 'shouldCommit',
-        message: 'Commit?',
-        default: false,
-        prefix: '',
-      }]);
+      console.log(
+        `\n‼️  ${chalk.white.bgRed.bold(
+          'WARNING!'
+        )} You are about to commit to ${branchName.toLowerCase()}!`
+      );
+      const answers = await inquirer.prompt([
+        {
+          type: 'confirm',
+          name: 'shouldCommit',
+          message: 'Commit?',
+          default: false,
+          prefix: '',
+        },
+      ]);
 
       if (!answers.shouldCommit) {
         console.log(chalk.magentaBright('\nPhew! Operation aborted!'));
@@ -195,8 +208,7 @@ const start = async () => {
     console.log(error);
     return;
   }
-}
-
+};
 
 async function checkIfGitRepo() {
   try {

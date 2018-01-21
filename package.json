@@ -12,6 +12,9 @@
   "bin": {
     "cmtr": "./index.js"
   },
+  "scripts": {
+    "pretty": "prettier --single-quote --trailing-comma es5 --write \"**/*.js\""
+  },
   "dependencies": {
     "chalk": "^2.2.0",
     "commander": "^2.11.2",
