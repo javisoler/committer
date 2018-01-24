@@ -5,6 +5,7 @@ const chalk = require('chalk');
 const os = require('os');
 const path = require('path');
 const inquirer = require('inquirer');
+const package = require('./package');
 
 const { displayError, runCommand, getBranchName } = require('./lib/utils');
 const { addFiles, getStagedFiles, getChangedFiles } = require('./lib/add');
@@ -15,7 +16,7 @@ const options = fetchConfig();
 
 // PARSE ARGUMENTS AND OPTIONS
 program
-  .version('0.1.0')
+  .version(package.version)
   .option('-a, --all', 'Add all files to staging')
   .option('-m, --message <message>', 'Commit message')
   .option('-u, --user <user>', 'Add user name to commit message')
