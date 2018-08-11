@@ -38,9 +38,12 @@ cmtr -am 'My commit message' -u 'JS'
 | `-m, --message <msg>` | Commit message |
 | `-u, --user <usr>` | Prepend user name to commit message |
 | `-b, --branch` | Prepend current branch name to commit message |
+| `-p, --parseIssue` | Attempt to parse issue name from the branch name |
 | `-s, --status` | Show the `git status` to start with |
 | `-f, --files` | Interactively select files to commit |
 | `-c, --config` | Interactively set up configuration |
+
+Sometimes we name branches with the Jira issue plus some description with a combination of dashes or underscores. The `parseIssue` option will try to extract the issue name from it. For instance, from the branch name "feature/CODE-100_Some-description" the program will extract "CODE-100" and prepend it to the commit message.
 
 ### Configuration
 To turn on some options by default run the configuration utility with `cmtr --config`. The configuration will be saved in `~/.cmtr-config.json`, which can be created/edited manually if desired.
@@ -50,6 +53,7 @@ This is an example configuration:
 {
   "userName": "JS",
   "includeBranch": true,
+  "parseIssue": true,
   "wrapper": true,
   "showFiles": true,
   "protectedBranches": [
@@ -64,6 +68,7 @@ Possible values for the configuration file:
 | ---  | --- | --- |
 | `userName` | `string` | Prepend user name |
 | `includeBranch` | `boolean` | Prepend branch name |
+| `parseIssue` | `boolean` | Extract Jira style issue name from the branch |
 | `wrapper` | `boolean` | Wrap user and branch with `[]` |
 | `showFiles` | `boolean` | Show interactive file selector |
 | `gitAddAll` | `boolean` | Add all files to commit |

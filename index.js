@@ -12,13 +12,14 @@ const {
 } = require('./lib/utils');
 const { addFiles, getStagedFiles, getChangedFiles } = require('./lib/add');
 const { fetchConfig, interactiveConfig } = require('./lib/config');
+const version = require('./package.json').version;
 
 // READ CONFIG FROM FILE
 const options = fetchConfig();
 
 // PARSE ARGUMENTS AND OPTIONS
 program
-  .version('0.1.0')
+  .version(version)
   .option('-a, --all', 'Add all files to staging')
   .option('-m, --message <message>', 'Commit message')
   .option('-u, --user <user>', 'Add user name to commit message')
