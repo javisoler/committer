@@ -15,6 +15,10 @@
   "scripts": {
     "pretty": "prettier --single-quote --trailing-comma es5 --write \"**/*.js\""
   },
+  "prettier": {
+    "singleQuote": true,
+    "trailingComma": true
+  },
   "dependencies": {
     "chalk": "^2.2.0",
     "commander": "^2.11.2",

@@ -2,11 +2,14 @@
 
 const program = require('commander');
 const chalk = require('chalk');
-const os = require('os');
-const path = require('path');
 const inquirer = require('inquirer');
 
-const { displayError, runCommand, getBranchName } = require('./lib/utils');
+const {
+  displayError,
+  runCommand,
+  getBranchName,
+  getIssueNameFromBranchName,
+} = require('./lib/utils');
 const { addFiles, getStagedFiles, getChangedFiles } = require('./lib/add');
 const { fetchConfig, interactiveConfig } = require('./lib/config');
 
@@ -20,6 +23,7 @@ program
   .option('-m, --message <message>', 'Commit message')
   .option('-u, --user <user>', 'Add user name to commit message')
   .option('-b, --branch', 'Add current branch name to commit message')
+  .option('-p, --parseIssue', 'Attempt to parse issue name from the branch name')
   .option('-s, --status', 'Show git status')
   .option('-f, --files', 'Interactively select files to commit')
   .option('-c, --config', 'Configuration wizard')
@@ -40,6 +44,10 @@ const start = async () => {
   // Get the branch name
   try {
     branchName = await getBranchName();
+    
+    if (program.parseIssue || options.parseIssue) {
+      branchName = getIssueNameFromBranchName(branchName);
+    }
   } catch (err) {
     console.error(err);
   }
@@ -129,7 +137,7 @@ const start = async () => {
   // SET BRANCH NAME
   if ((options.includeBranch || program.branch) && branchName.length) {
     message = `${message || ''}${options.wrapper ? '[' : ''}${branchName}${
-      options.wrapper ? ']' : ''
+      options.wrapper ? ']' : ':'
     } `;
   }
 
