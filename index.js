@@ -234,7 +234,7 @@ const start = async () => {
 
     console.log('');
     console.log(chalk.dim(output));
-    console.log(`🏆  ${chalk.greenBright('Done!')}`);
+    console.log(` 🏆  ${chalk.greenBright('Done!')}`);
   } catch (error) {
     console.log(error);
     return;
