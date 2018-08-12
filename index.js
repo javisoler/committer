@@ -153,7 +153,7 @@ const start = async () => {
       {
         type: 'list',
         name: 'commitAction',
-        message: `\n 🚦  ${chalk.yellow.bold('Options:')}`,
+        message: `\n 🚦 ${chalk.yellow.bold('Options:')}`,
         prefix: '',
         choices: [
           { name: 'Commit with message', value: 'commit' },
@@ -192,8 +192,8 @@ const start = async () => {
   ) {
     try {
       console.log(
-        `\n ‼️  ${chalk.white.bgRed.bold(
-          'WARNING!'
+        `\n ☢️  ${chalk.whiteBright.bgRed.bold(
+          'WARNING'
         )} You are about to commit to ${branchName.toLowerCase()}!`
       );
       const answers = await inquirer.prompt([
