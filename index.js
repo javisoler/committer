@@ -107,9 +107,7 @@ const start = async () => {
   // PROMPT FOR MESSAGE IF NOT INCLUDED
   if (!program.message) {
     try {
-      if (!program.status) console.log('');
-
-      console.log(`💻  ${chalk.yellow.bold('Enter your commit message:')}`);
+      console.log(` ✏️  ${chalk.yellow.bold('Enter your commit message:')}`);
 
       const answers = await inquirer.prompt([
         {
@@ -146,38 +144,41 @@ const start = async () => {
   }
 
   // CONFIRM FINAL COMMIT MESSAGE WITH USER
-  message = JSON.stringify(`${message || ''}${program.message || userMessage}`);
+  message = `${message || ''}${program.message || userMessage}`;
 
   try {
-    console.log(`\nYour commit message: ${chalk.greenBright(message)}`);
+    console.log(`\n Your commit message: "${chalk.greenBright(message)}"`);
 
     const answers = await inquirer.prompt([
       {
         type: 'list',
         name: 'commitAction',
-        message: 'Do you want to commit?',
+        message: `\n 🚦  ${chalk.yellow.bold('Options:')}`,
         prefix: '',
-        choices: ['Commit', 'Edit', 'Cancel'],
+        choices: [
+          { name: 'Commit with message', value: 'commit' },
+          { name: 'Edit commit message', value: 'edit' },
+          { name: 'Cancel and exit', value: 'cancel' },
+        ],
       },
     ]);
 
-    if (answers.commitAction === 'Cancel' || !answers.commitAction) {
+    if (answers.commitAction === 'cancel' || !answers.commitAction) {
       return;
     }
 
-    if (answers.commitAction === 'Edit') {
+    if (answers.commitAction === 'edit') {
       const editAnswers = await inquirer.prompt([
         {
           type: 'editor',
           name: 'editedMessage',
-          message: 'Please edit your commit message:',
+          message: `✏️  ${chalk.yellow.bold('Edit message:')}`,
           prefix: '',
           default: message,
         },
       ]);
 
-      console.log(editAnswers.editedMessage);
-      return;
+      message = editAnswers.editedMessage;
     }
   } catch (error) {
     console.log('');
@@ -191,7 +192,7 @@ const start = async () => {
   ) {
     try {
       console.log(
-        `\n‼️  ${chalk.white.bgRed.bold(
+        `\n ‼️  ${chalk.white.bgRed.bold(
           'WARNING!'
         )} You are about to commit to ${branchName.toLowerCase()}!`
       );
@@ -199,14 +200,14 @@ const start = async () => {
         {
           type: 'confirm',
           name: 'shouldCommit',
-          message: 'Commit?',
+          message: `${chalk.yellow.bold('Commit?')}`,
           default: false,
           prefix: '',
         },
       ]);
 
       if (!answers.shouldCommit) {
-        console.log(chalk.magentaBright('\nPhew! Operation aborted!'));
+        console.log(chalk.magentaBright('\n Phew! Operation aborted!'));
         return;
       }
     } catch (error) {
@@ -226,7 +227,9 @@ const start = async () => {
 
   // RUN GIT COMMIT
   try {
-    const command = `git commit ${gitOptions.join(' ')} ${message}`;
+    const command = `git commit ${gitOptions.join(' ')} ${JSON.stringify(
+      message
+    )}`;
     const output = await runCommand(command);
 
     console.log('');
