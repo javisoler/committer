@@ -24,7 +24,10 @@ program
   .option('-m, --message <message>', 'Commit message')
   .option('-u, --user <user>', 'Add user name to commit message')
   .option('-b, --branch', 'Add current branch name to commit message')
-  .option('-p, --parseIssue', 'Attempt to parse issue name from the branch name')
+  .option(
+    '-p, --parseIssue',
+    'Attempt to parse issue name from the branch name'
+  )
   .option('-s, --status', 'Show git status')
   .option('-f, --files', 'Interactively select files to commit')
   .option('-c, --config', 'Configuration wizard')
@@ -45,7 +48,7 @@ const start = async () => {
   // Get the branch name
   try {
     branchName = await getBranchName();
-    
+
     if (program.parseIssue || options.parseIssue) {
       branchName = getIssueNameFromBranchName(branchName);
     }
@@ -150,14 +153,30 @@ const start = async () => {
 
     const answers = await inquirer.prompt([
       {
-        type: 'confirm',
-        name: 'shouldCommit',
-        message: 'Commit?',
+        type: 'list',
+        name: 'commitAction',
+        message: 'Do you want to commit?',
         prefix: '',
+        choices: ['Commit', 'Edit', 'Cancel'],
       },
     ]);
 
-    if (!answers.shouldCommit) {
+    if (answers.commitAction === 'Cancel' || !answers.commitAction) {
+      return;
+    }
+
+    if (answers.commitAction === 'Edit') {
+      const editAnswers = await inquirer.prompt([
+        {
+          type: 'editor',
+          name: 'editedMessage',
+          message: 'Please edit your commit message:',
+          prefix: '',
+          default: message,
+        },
+      ]);
+
+      console.log(editAnswers.editedMessage);
       return;
     }
   } catch (error) {
