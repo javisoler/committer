@@ -230,13 +230,11 @@ const start = async () => {
     const command = `git commit ${gitOptions.join(' ')} ${JSON.stringify(
       message
     )}`;
-    const output = await runCommand(command);
-
     console.log('');
-    console.log(chalk.dim(output));
+    await runCommand(command, true);
+
     console.log(` 🏆  ${chalk.greenBright('Done!')}`);
   } catch (error) {
-    console.log(error);
     return;
   }
 };
