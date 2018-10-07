@@ -1,6 +1,6 @@
 {
   "name": "cmtr",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "Helper script to add user initials and branch name to commits",
   "repository": {
     "type": "git",
