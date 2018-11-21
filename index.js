@@ -12,6 +12,7 @@ const {
 } = require('./lib/utils');
 const { addFiles, getStagedFiles, getChangedFiles } = require('./lib/add');
 const { fetchConfig, interactiveConfig } = require('./lib/config');
+const { branches } = require('./lib/branches');
 const version = require('./package.json').version;
 
 // READ CONFIG FROM FILE
@@ -30,6 +31,7 @@ program
   )
   .option('-s, --status', 'Show git status')
   .option('-f, --files', 'Interactively select files to commit')
+  .option('--branches', 'Interactively delete local branches')
   .option('-c, --config', 'Configuration wizard')
   .parse(process.argv);
 
@@ -239,6 +241,10 @@ const start = async () => {
   }
 };
 
+const startBranches = () => {
+  branches();
+};
+
 async function checkIfGitRepo() {
   try {
     const command = `git rev-parse --is-inside-work-tree`;
@@ -249,7 +255,8 @@ async function checkIfGitRepo() {
     }
 
     // Start the app
-    start();
+    if (!program.branches) start();
+    else startBranches();
   } catch (error) {
     displayError('Committer can only be run inside a git repository!');
   }
